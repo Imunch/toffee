@@ -1,0 +1,1258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Toffifee Appreciation Dashboard</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Inter:wght@300;400;500;600;700&display=swap');
+
+  :root {
+    --toffifee-brown: #5C2D0E;
+    --toffifee-caramel: #C47A2A;
+    --toffifee-gold: #D4A843;
+    --toffifee-cream: #F5E6D3;
+    --toffifee-chocolate: #3B1A06;
+    --toffifee-nougat: #A0724A;
+    --toffifee-hazel: #8B6914;
+    --toffifee-red: #C0392B;
+    --bg-dark: #1a0f05;
+    --bg-card: #2a1a0d;
+    --text-light: #F5E6D3;
+    --text-muted: #BFA88E;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--bg-dark);
+    color: var(--text-light);
+    overflow-x: hidden;
+  }
+
+  /* ── Hero ── */
+  .hero {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 2rem;
+    background: radial-gradient(ellipse at 50% 40%, #3d1f0a 0%, var(--bg-dark) 70%);
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -50%; left: -50%;
+    width: 200%; height: 200%;
+    background: conic-gradient(from 0deg at 50% 50%, transparent 0deg, rgba(196,122,42,0.04) 60deg, transparent 120deg, rgba(196,122,42,0.06) 180deg, transparent 240deg, rgba(196,122,42,0.04) 300deg, transparent 360deg);
+    animation: shimmer 25s linear infinite;
+  }
+
+  @keyframes shimmer { to { transform: rotate(360deg); } }
+
+  .hero-toffifee {
+    position: relative; z-index: 1;
+    width: 140px; height: 140px;
+    margin-bottom: 1.5rem;
+    animation: float 3s ease-in-out infinite;
+  }
+
+  .hero-toffifee .cup {
+    width: 140px; height: 80px;
+    background: linear-gradient(135deg, #e8a33c, #c47a2a, #a86020);
+    border-radius: 50% 50% 45% 45% / 40% 40% 60% 60%;
+    position: absolute; bottom: 0;
+    box-shadow: 0 8px 30px rgba(196,122,42,0.4);
+  }
+
+  .hero-toffifee .choco {
+    width: 60px; height: 30px;
+    background: linear-gradient(135deg, #5a3010, #3b1a06);
+    border-radius: 50%;
+    position: absolute;
+    top: 15px; left: 50%;
+    transform: translateX(-50%);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+  }
+
+  .hero-toffifee .hazel {
+    width: 20px; height: 20px;
+    background: radial-gradient(circle at 40% 40%, #b8860b, #8b6914);
+    border-radius: 50%;
+    position: absolute;
+    top: 40px; left: 50%;
+    transform: translateX(-50%);
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-15px); }
+  }
+
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.5rem, 6vw, 4.5rem);
+    font-weight: 900;
+    background: linear-gradient(135deg, #FFD700, var(--toffifee-caramel), #e8a33c);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 0.5rem;
+    position: relative; z-index: 1;
+  }
+
+  .hero .tagline {
+    font-size: 1.1rem;
+    color: var(--text-muted);
+    max-width: 580px;
+    line-height: 1.7;
+    position: relative; z-index: 1;
+  }
+
+  .hero .born {
+    margin-top: 1.2rem;
+    font-size: 0.85rem;
+    color: var(--toffifee-caramel);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    position: relative; z-index: 1;
+  }
+
+  .scroll-hint {
+    position: absolute;
+    bottom: 2rem;
+    animation: bounce 2s ease-in-out infinite;
+    font-size: 1.5rem;
+    color: var(--toffifee-gold);
+    z-index: 1;
+  }
+
+  @keyframes bounce {
+    0%, 100% { transform: translateY(0); opacity: 1; }
+    50% { transform: translateY(10px); opacity: 0.5; }
+  }
+
+  /* ── Sections ── */
+  section { padding: 4rem 2rem; max-width: 1200px; margin: 0 auto; }
+
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: var(--toffifee-gold);
+    text-align: center;
+    margin-bottom: 2.5rem;
+  }
+
+  .section-subtitle {
+    text-align: center;
+    color: var(--text-muted);
+    max-width: 600px;
+    margin: -1.5rem auto 2.5rem;
+    font-size: 1rem;
+    line-height: 1.6;
+  }
+
+  /* ── Stat cards ── */
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.25rem;
+  }
+
+  .stat-card {
+    background: var(--bg-card);
+    border: 1px solid rgba(196,122,42,0.15);
+    border-radius: 16px;
+    padding: 1.75rem 1.25rem;
+    text-align: center;
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+
+  .stat-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 30px rgba(196,122,42,0.15);
+  }
+
+  .stat-icon { font-size: 2.2rem; margin-bottom: 0.6rem; }
+
+  .stat-number {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.2rem;
+    font-weight: 900;
+    color: #FFD700;
+    display: block;
+  }
+
+  .stat-label {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-top: 0.2rem;
+  }
+
+  /* ── Anatomy ── */
+  .anatomy-wrap {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .anatomy-visual {
+    position: relative;
+    width: 280px; height: 280px;
+    flex-shrink: 0;
+  }
+
+  .anatomy-visual .layer {
+    position: absolute;
+    left: 50%; transform: translateX(-50%);
+    border-radius: 50%;
+    transition: transform 0.4s, box-shadow 0.4s;
+    cursor: default;
+  }
+
+  .anatomy-visual:hover .layer { transform: translateX(-50%) scale(1.05); }
+
+  .layer-caramel {
+    width: 260px; height: 140px;
+    background: linear-gradient(135deg, #e8a33c, #c47a2a);
+    bottom: 10px;
+    border-radius: 50% 50% 45% 45% / 40% 40% 60% 60%;
+    box-shadow: 0 10px 40px rgba(196,122,42,0.4);
+  }
+
+  .layer-nougat {
+    width: 200px; height: 90px;
+    background: linear-gradient(135deg, #c9956a, #a0724a);
+    bottom: 55px;
+    border-radius: 50%;
+    box-shadow: 0 6px 20px rgba(160,114,74,0.3);
+  }
+
+  .layer-hazel {
+    width: 50px; height: 50px;
+    background: radial-gradient(circle at 35% 35%, #d4a843, #8b6914);
+    bottom: 80px;
+    border-radius: 50%;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+  }
+
+  .layer-choco {
+    width: 120px; height: 50px;
+    background: linear-gradient(135deg, #5a3010, #3b1a06);
+    top: 15px;
+    border-radius: 50%;
+    box-shadow: 0 6px 15px rgba(0,0,0,0.4);
+  }
+
+  .anatomy-legend {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    max-width: 400px;
+  }
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    background: var(--bg-card);
+    border-radius: 12px;
+    padding: 1rem 1.25rem;
+    border: 1px solid rgba(196,122,42,0.1);
+  }
+
+  .legend-swatch {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .legend-label { font-weight: 600; font-size: 0.95rem; }
+
+  .legend-pct {
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+    color: var(--toffifee-caramel);
+    margin-left: auto;
+    font-size: 1.1rem;
+  }
+
+  /* ── Timeline ── */
+  .timeline { position: relative; padding: 1rem 0; }
+
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 50%; top: 0; bottom: 0;
+    width: 3px;
+    background: linear-gradient(to bottom, var(--toffifee-caramel), var(--toffifee-chocolate));
+    transform: translateX(-50%);
+  }
+
+  .timeline-item {
+    position: relative;
+    width: 44%;
+    padding: 1.5rem;
+    background: var(--bg-card);
+    border: 1px solid rgba(196,122,42,0.12);
+    border-radius: 12px;
+    margin-bottom: 2rem;
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.6s, transform 0.6s;
+  }
+
+  .timeline-item.visible { opacity: 1; transform: translateY(0); }
+  .timeline-item:nth-child(odd) { margin-left: 5%; }
+  .timeline-item:nth-child(even) { margin-left: 51%; }
+
+  .timeline-item::before {
+    content: '';
+    position: absolute;
+    width: 14px; height: 14px;
+    background: var(--toffifee-caramel);
+    border: 3px solid var(--bg-dark);
+    border-radius: 50%;
+    top: 1.8rem;
+  }
+
+  .timeline-item:nth-child(odd)::before { right: -32px; }
+  .timeline-item:nth-child(even)::before { left: -32px; }
+
+  .timeline-year {
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+    font-size: 1.3rem;
+    color: var(--toffifee-caramel);
+    margin-bottom: 0.3rem;
+  }
+
+  .timeline-text {
+    font-size: 0.92rem;
+    line-height: 1.5;
+    color: var(--text-muted);
+  }
+
+  /* ── Fun facts carousel ── */
+  .facts-container {
+    position: relative;
+    overflow: hidden;
+    border-radius: 20px;
+    background: linear-gradient(135deg, var(--bg-card), #3a2515);
+    border: 1px solid rgba(196,122,42,0.2);
+    padding: 3rem 2rem;
+    text-align: center;
+    min-height: 240px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .fact-display { max-width: 600px; }
+  .fact-emoji { font-size: 3rem; margin-bottom: 1rem; }
+
+  .fact-text {
+    font-size: 1.1rem;
+    line-height: 1.7;
+    color: var(--text-light);
+  }
+
+  .fact-controls {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1.5rem;
+    align-items: center;
+  }
+
+  .fact-btn {
+    background: rgba(196,122,42,0.2);
+    border: 1px solid var(--toffifee-caramel);
+    color: var(--toffifee-caramel);
+    width: 42px; height: 42px;
+    border-radius: 50%;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: background 0.3s;
+    display: flex; align-items: center; justify-content: center;
+  }
+
+  .fact-btn:hover { background: rgba(196,122,42,0.4); }
+
+  .fact-dots { display: flex; gap: 6px; }
+
+  .fact-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: rgba(196,122,42,0.3);
+    transition: background 0.3s, transform 0.3s;
+  }
+
+  .fact-dot.active {
+    background: var(--toffifee-caramel);
+    transform: scale(1.3);
+  }
+
+  /* ── Globe ── */
+  .globe-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+    gap: 1rem;
+  }
+
+  .globe-item {
+    background: var(--bg-card);
+    border-radius: 12px;
+    padding: 1.25rem;
+    text-align: center;
+    border: 1px solid rgba(196,122,42,0.1);
+    transition: transform 0.3s;
+  }
+
+  .globe-item:hover { transform: scale(1.05); }
+  .globe-flag { font-size: 2.5rem; margin-bottom: 0.4rem; }
+
+  .globe-country {
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--text-light);
+  }
+
+  .globe-note {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    margin-top: 0.2rem;
+  }
+
+  /* ── TIVP Counter ── */
+  .counter-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+  }
+
+  .counter-card {
+    background: linear-gradient(135deg, #2e1a0a, #3d2515);
+    border: 1px solid rgba(196,122,42,0.25);
+    border-radius: 24px;
+    padding: 2.5rem 3rem;
+    text-align: center;
+    width: 100%;
+    max-width: 500px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .counter-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--toffifee-caramel), #FFD700, var(--toffifee-caramel));
+  }
+
+  .counter-label {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--toffifee-caramel);
+    margin-bottom: 0.5rem;
+  }
+
+  .counter-display {
+    font-family: 'Playfair Display', serif;
+    font-size: 6rem;
+    font-weight: 900;
+    color: #FFD700;
+    line-height: 1;
+    margin-bottom: 0.25rem;
+    transition: transform 0.15s;
+    user-select: none;
+  }
+
+  .counter-display.bump {
+    transform: scale(1.12);
+  }
+
+  .counter-reaction {
+    font-size: 1.1rem;
+    color: var(--text-muted);
+    min-height: 1.6rem;
+    transition: opacity 0.3s;
+    margin-bottom: 1.25rem;
+  }
+
+  .counter-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .counter-btn {
+    width: 56px; height: 56px;
+    border-radius: 50%;
+    border: 2px solid var(--toffifee-caramel);
+    background: rgba(196,122,42,0.15);
+    color: var(--toffifee-caramel);
+    font-size: 1.6rem;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.15s;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700;
+  }
+
+  .counter-btn:hover { background: rgba(196,122,42,0.35); }
+  .counter-btn:active { transform: scale(0.92); }
+
+  .counter-btn.primary {
+    width: 72px; height: 72px;
+    font-size: 2rem;
+    background: linear-gradient(135deg, var(--toffifee-caramel), #a86020);
+    border-color: #FFD700;
+    color: #fff;
+    box-shadow: 0 6px 25px rgba(196,122,42,0.35);
+  }
+
+  .counter-btn.primary:hover {
+    box-shadow: 0 8px 35px rgba(196,122,42,0.5);
+  }
+
+  .counter-reset {
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    font-size: 0.8rem;
+    cursor: pointer;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    margin-top: 0.5rem;
+    transition: color 0.2s;
+  }
+
+  .counter-reset:hover { color: var(--toffifee-caramel); }
+
+  .counter-milestones {
+    display: flex;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+    justify-content: center;
+    max-width: 500px;
+  }
+
+  .milestone {
+    padding: 0.4rem 0.9rem;
+    border-radius: 50px;
+    font-size: 0.78rem;
+    background: rgba(196,122,42,0.08);
+    border: 1px solid rgba(196,122,42,0.15);
+    color: var(--text-muted);
+    transition: all 0.3s;
+  }
+
+  .milestone.reached {
+    background: rgba(196,122,42,0.25);
+    border-color: var(--toffifee-caramel);
+    color: var(--toffifee-gold);
+  }
+
+  .confetti-container {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    pointer-events: none;
+    z-index: 9999;
+    overflow: hidden;
+  }
+
+  .confetti-piece {
+    position: absolute;
+    width: 10px; height: 10px;
+    opacity: 0;
+    animation: confettiFall 1.5s ease-out forwards;
+  }
+
+  @keyframes confettiFall {
+    0% { opacity: 1; transform: translateY(0) rotate(0deg) scale(1); }
+    100% { opacity: 0; transform: translateY(80vh) rotate(720deg) scale(0.3); }
+  }
+
+  /* ── Recipe ── */
+  .recipe-card {
+    background: linear-gradient(135deg, #2e1a0a, #3d2515);
+    border: 1px solid rgba(196,122,42,0.25);
+    border-radius: 20px;
+    overflow: hidden;
+  }
+
+  .recipe-header {
+    background: linear-gradient(135deg, var(--toffifee-caramel), #a86020);
+    padding: 2rem;
+    text-align: center;
+  }
+
+  .recipe-header h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.8rem;
+    font-weight: 900;
+    color: #fff;
+  }
+
+  .recipe-header p {
+    color: rgba(255,255,255,0.85);
+    font-size: 0.9rem;
+    margin-top: 0.3rem;
+  }
+
+  .recipe-body { padding: 2rem; }
+
+  .recipe-meta {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+  }
+
+  .recipe-meta-item {
+    text-align: center;
+  }
+
+  .recipe-meta-icon { font-size: 1.6rem; }
+
+  .recipe-meta-val {
+    font-weight: 700;
+    color: var(--toffifee-caramel);
+    font-size: 1rem;
+  }
+
+  .recipe-meta-label {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  .recipe-columns {
+    display: grid;
+    grid-template-columns: 1fr 1.6fr;
+    gap: 2rem;
+  }
+
+  @media (max-width: 700px) {
+    .recipe-columns { grid-template-columns: 1fr; }
+  }
+
+  .recipe-ingredients h4,
+  .recipe-steps h4 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.2rem;
+    color: var(--toffifee-gold);
+    margin-bottom: 1rem;
+  }
+
+  .ingredient-group {
+    margin-bottom: 1.25rem;
+  }
+
+  .ingredient-group-title {
+    font-weight: 600;
+    font-size: 0.85rem;
+    color: var(--toffifee-caramel);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 0.5rem;
+    padding-bottom: 0.3rem;
+    border-bottom: 1px solid rgba(196,122,42,0.15);
+  }
+
+  .ingredient-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.35rem 0;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    border-bottom: 1px dotted rgba(196,122,42,0.08);
+  }
+
+  .ingredient-item .qty {
+    color: var(--text-light);
+    font-weight: 500;
+    white-space: nowrap;
+    margin-left: 1rem;
+  }
+
+  .step {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1.25rem;
+    align-items: flex-start;
+  }
+
+  .step-num {
+    width: 32px; height: 32px;
+    min-width: 32px;
+    background: rgba(196,122,42,0.2);
+    border: 1px solid var(--toffifee-caramel);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700;
+    font-size: 0.85rem;
+    color: var(--toffifee-caramel);
+    margin-top: 2px;
+  }
+
+  .step-text {
+    font-size: 0.9rem;
+    line-height: 1.6;
+    color: var(--text-muted);
+  }
+
+  .step-text strong { color: var(--text-light); }
+
+  .recipe-tip {
+    margin-top: 1.5rem;
+    padding: 1rem 1.25rem;
+    background: rgba(196,122,42,0.08);
+    border-left: 3px solid var(--toffifee-caramel);
+    border-radius: 0 10px 10px 0;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    line-height: 1.6;
+  }
+
+  .recipe-tip strong { color: var(--toffifee-caramel); }
+
+  /* ── Quote ── */
+  .quote-banner {
+    background: linear-gradient(135deg, #3a1f0a, #5a3418);
+    border-radius: 20px;
+    padding: 3rem 2rem;
+    text-align: center;
+    margin: 2rem auto;
+    max-width: 800px;
+    border: 1px solid rgba(196,122,42,0.2);
+  }
+
+  .quote-text {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem;
+    font-style: italic;
+    color: var(--toffifee-cream);
+    line-height: 1.6;
+  }
+
+  .quote-author {
+    margin-top: 1rem;
+    font-size: 0.9rem;
+    color: var(--toffifee-caramel);
+  }
+
+  /* ── Footer ── */
+  footer {
+    text-align: center;
+    padding: 3rem 2rem;
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    border-top: 1px solid rgba(196,122,42,0.1);
+    margin-top: 2rem;
+  }
+
+  footer span { color: var(--toffifee-caramel); }
+
+  /* ── Responsive ── */
+  @media (max-width: 768px) {
+    .timeline::before { left: 20px; }
+    .timeline-item { width: calc(100% - 50px); margin-left: 50px !important; }
+    .timeline-item::before { left: -37px !important; right: auto !important; }
+    .stats-grid { grid-template-columns: repeat(2, 1fr); }
+    .anatomy-wrap { flex-direction: column; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══════ HERO ═══════ -->
+<div class="hero">
+  <div class="hero-toffifee">
+    <div class="cup"></div>
+    <div class="choco"></div>
+    <div class="hazel"></div>
+  </div>
+  <h1>The Toffifee<br>Appreciation Dashboard</h1>
+  <p class="tagline">A hazelnut in caramel, with creamy nougat and chocolate. Born in Germany, loved in 100+ countries. This is Toffifee's moment.</p>
+  <div class="born">By Storck &middot; Since 1973 &middot; Made with Joy</div>
+  <div class="scroll-hint">&#8595;</div>
+</div>
+
+<!-- ═══════ TIVP COUNTER ═══════ -->
+<section>
+  <h2 class="section-title">Toffifee Intake Volume Protocol (TIVP)</h2>
+  <p class="section-subtitle">Track your personal Toffifee consumption. Be honest. No judgement. Only appreciation.</p>
+  <div class="counter-section">
+    <div class="counter-card">
+      <div class="counter-label">Pieces consumed today</div>
+      <div class="counter-display" id="counterNum">0</div>
+      <div class="counter-reaction" id="counterReaction">Tap + to start counting...</div>
+      <div class="counter-buttons">
+        <button class="counter-btn" id="counterMinus" title="Oops, one less">−</button>
+        <button class="counter-btn primary" id="counterPlus" title="Ate another one!">+</button>
+      </div>
+      <button class="counter-reset" id="counterReset">Reset counter</button>
+    </div>
+    <div class="counter-milestones" id="milestones">
+      <div class="milestone" data-at="1">First bite</div>
+      <div class="milestone" data-at="5">Handful</div>
+      <div class="milestone" data-at="10">Half a box</div>
+      <div class="milestone" data-at="15">Full box!</div>
+      <div class="milestone" data-at="30">Double box</div>
+      <div class="milestone" data-at="50">Legend</div>
+      <div class="milestone" data-at="100">Toffifee Royalty</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════ KEY STATS ═══════ -->
+<section>
+  <h2 class="section-title">Toffifee by the Numbers</h2>
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-icon">📅</div>
+      <span class="stat-number" data-target="1973">0</span>
+      <div class="stat-label">Year born in Germany</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon">🌍</div>
+      <span class="stat-number" data-target="100" data-suffix="+">0</span>
+      <div class="stat-label">Countries sold worldwide</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon">🧈</div>
+      <span class="stat-number" data-target="4">0</span>
+      <div class="stat-label">Layers of perfection</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon">🌰</div>
+      <span class="stat-number" data-target="1">0</span>
+      <div class="stat-label">Whole hazelnut inside</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon">📦</div>
+      <span class="stat-number" data-target="15">0</span>
+      <div class="stat-label">Pieces in a classic box</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon">😋</div>
+      <span class="stat-number" data-target="100" data-suffix="%">0</span>
+      <div class="stat-label">Satisfaction guaranteed</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════ ANATOMY ═══════ -->
+<section>
+  <h2 class="section-title">Anatomy of a Toffifee</h2>
+  <p class="section-subtitle">Four layers, one masterpiece. Every single piece is an architectural marvel of confectionery engineering.</p>
+  <div class="anatomy-wrap">
+    <div class="anatomy-visual">
+      <div class="layer layer-choco"></div>
+      <div class="layer layer-hazel"></div>
+      <div class="layer layer-nougat"></div>
+      <div class="layer layer-caramel"></div>
+    </div>
+    <div class="anatomy-legend">
+      <div class="legend-item">
+        <div class="legend-swatch" style="background:linear-gradient(135deg,#5a3010,#3b1a06)"></div>
+        <div>
+          <div class="legend-label">Chocolate Cap</div>
+          <div style="font-size:0.8rem;color:var(--text-muted)">Rich dark chocolate button on top</div>
+        </div>
+        <div class="legend-pct">12%</div>
+      </div>
+      <div class="legend-item">
+        <div class="legend-swatch" style="background:linear-gradient(135deg,#c9956a,#a0724a)"></div>
+        <div>
+          <div class="legend-label">Nougat Cream</div>
+          <div style="font-size:0.8rem;color:var(--text-muted)">Smooth, nutty, creamy center</div>
+        </div>
+        <div class="legend-pct">37%</div>
+      </div>
+      <div class="legend-item">
+        <div class="legend-swatch" style="background:radial-gradient(circle at 35% 35%,#d4a843,#8b6914)"></div>
+        <div>
+          <div class="legend-label">Whole Hazelnut</div>
+          <div style="font-size:0.8rem;color:var(--text-muted)">Crunchy, roasted, and golden</div>
+        </div>
+        <div class="legend-pct">10%</div>
+      </div>
+      <div class="legend-item">
+        <div class="legend-swatch" style="background:linear-gradient(135deg,#e8a33c,#c47a2a)"></div>
+        <div>
+          <div class="legend-label">Caramel Cup</div>
+          <div style="font-size:0.8rem;color:var(--text-muted)">Chewy, buttery base that holds it all</div>
+        </div>
+        <div class="legend-pct">41%</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════ TIMELINE ═══════ -->
+<section>
+  <h2 class="section-title">The Toffifee Story</h2>
+  <div class="timeline">
+    <div class="timeline-item">
+      <div class="timeline-year">1903</div>
+      <div class="timeline-text">August Storck opens a small candy factory in Werther, Germany — the company that would one day create Toffifee.</div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-year">1973</div>
+      <div class="timeline-text">Toffifee is born in West Germany! The world's first candy combining a caramel cup, whole hazelnut, nougat cream, and chocolate cap. Originally marketed as an energy snack for working women.</div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-year">Late 1970s</div>
+      <div class="timeline-text">Early TV ads in Germany position Toffifee as a fun, family-oriented treat. The iconic brown box design becomes instantly recognizable.</div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-year">1980s</div>
+      <div class="timeline-text">The famous tagline arrives: "There's so much fun in Toffifee!" Toffifee expands beyond Germany to conquer European shelves.</div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-year">1990s</div>
+      <div class="timeline-text">Toffifee enters the US market — rebranded as "Toffifay" with a white box design. The rest of the world keeps the original brown box and spelling.</div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-year">2016</div>
+      <div class="timeline-text">Toffifee reaches the milestone of being sold in over 100 countries. From Berlin to Tokyo to Toronto — the world is hooked.</div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-year">Today</div>
+      <div class="timeline-text">Toffifee remains one of the world's most beloved boxed candies — a go-to gift, a nostalgic treat, and a perfect four-layer masterpiece.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════ FUN FACTS ═══════ -->
+<section>
+  <h2 class="section-title">Did You Know?</h2>
+  <div class="facts-container">
+    <div class="fact-display">
+      <div class="fact-emoji" id="factEmoji">🤯</div>
+      <div class="fact-text" id="factText">Loading...</div>
+    </div>
+    <div class="fact-controls">
+      <button class="fact-btn" id="prevFact">&#8592;</button>
+      <div class="fact-dots" id="factDots"></div>
+      <button class="fact-btn" id="nextFact">&#8594;</button>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════ AROUND THE WORLD ═══════ -->
+<section>
+  <h2 class="section-title">Toffifee Around the World</h2>
+  <p class="section-subtitle">Same irresistible candy, different names and packaging depending on where you are.</p>
+  <div class="globe-grid">
+    <div class="globe-item">
+      <div class="globe-flag">🇩🇪</div>
+      <div class="globe-country">Germany</div>
+      <div class="globe-note">Birthplace — the OG brown box</div>
+    </div>
+    <div class="globe-item">
+      <div class="globe-flag">🇺🇸</div>
+      <div class="globe-country">United States</div>
+      <div class="globe-note">Sold as "Toffifay" in white box</div>
+    </div>
+    <div class="globe-item">
+      <div class="globe-flag">🇨🇦</div>
+      <div class="globe-country">Canada</div>
+      <div class="globe-note">Classic Toffifee branding</div>
+    </div>
+    <div class="globe-item">
+      <div class="globe-flag">🇬🇧</div>
+      <div class="globe-country">United Kingdom</div>
+      <div class="globe-note">Holiday gift box favorite</div>
+    </div>
+    <div class="globe-item">
+      <div class="globe-flag">🇩🇰</div>
+      <div class="globe-country">Denmark</div>
+      <div class="globe-note">A classic treat in every home</div>
+    </div>
+    <div class="globe-item">
+      <div class="globe-flag">🇯🇵</div>
+      <div class="globe-country">Japan</div>
+      <div class="globe-note">Popular imported confection</div>
+    </div>
+    <div class="globe-item">
+      <div class="globe-flag">🇦🇺</div>
+      <div class="globe-country">Australia</div>
+      <div class="globe-note">Growing fanbase down under</div>
+    </div>
+    <div class="globe-item">
+      <div class="globe-flag">🇧🇷</div>
+      <div class="globe-country">Brazil</div>
+      <div class="globe-note">Beloved across Latin America</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════ RECIPE ═══════ -->
+<section>
+  <h2 class="section-title">Make Your Own Toffifee</h2>
+  <p class="section-subtitle">Can't wait for the store? Here's how to make a homemade version that's surprisingly close to the real thing.</p>
+  <div class="recipe-card">
+    <div class="recipe-header">
+      <h3>Homemade Toffifee</h3>
+      <p>Caramel cups with hazelnut, nougat & chocolate</p>
+    </div>
+    <div class="recipe-body">
+      <div class="recipe-meta">
+        <div class="recipe-meta-item">
+          <div class="recipe-meta-icon">&#9201;</div>
+          <div class="recipe-meta-val">20 min</div>
+          <div class="recipe-meta-label">Prep</div>
+        </div>
+        <div class="recipe-meta-item">
+          <div class="recipe-meta-icon">&#128293;</div>
+          <div class="recipe-meta-val">15 min</div>
+          <div class="recipe-meta-label">Cook</div>
+        </div>
+        <div class="recipe-meta-item">
+          <div class="recipe-meta-icon">&#10052;</div>
+          <div class="recipe-meta-val">1 hour</div>
+          <div class="recipe-meta-label">Chill</div>
+        </div>
+        <div class="recipe-meta-item">
+          <div class="recipe-meta-icon">&#127860;</div>
+          <div class="recipe-meta-val">~20 pcs</div>
+          <div class="recipe-meta-label">Yield</div>
+        </div>
+      </div>
+
+      <div class="recipe-columns">
+        <div class="recipe-ingredients">
+          <h4>Ingredients</h4>
+
+          <div class="ingredient-group">
+            <div class="ingredient-group-title">Caramel Cups</div>
+            <div class="ingredient-item"><span>Granulated sugar</span><span class="qty">200 g</span></div>
+            <div class="ingredient-item"><span>Glucose / corn syrup</span><span class="qty">2 tbsp</span></div>
+            <div class="ingredient-item"><span>Heavy cream</span><span class="qty">150 ml</span></div>
+            <div class="ingredient-item"><span>Butter</span><span class="qty">25 g</span></div>
+            <div class="ingredient-item"><span>Water</span><span class="qty">50 ml</span></div>
+            <div class="ingredient-item"><span>Pinch of salt</span><span class="qty">&mdash;</span></div>
+          </div>
+
+          <div class="ingredient-group">
+            <div class="ingredient-group-title">Filling</div>
+            <div class="ingredient-item"><span>Whole hazelnuts, roasted</span><span class="qty">~20</span></div>
+            <div class="ingredient-item"><span>Nutella or nougat spread</span><span class="qty">100 g</span></div>
+          </div>
+
+          <div class="ingredient-group">
+            <div class="ingredient-group-title">Topping</div>
+            <div class="ingredient-item"><span>Dark chocolate</span><span class="qty">100 g</span></div>
+          </div>
+        </div>
+
+        <div class="recipe-steps">
+          <h4>Method</h4>
+
+          <div class="step">
+            <div class="step-num">1</div>
+            <div class="step-text"><strong>Toast the hazelnuts.</strong> Spread hazelnuts on a baking tray and roast at 180°C (350°F) for 10–12 minutes until golden and fragrant. Rub off any loose skins with a clean towel. Set aside.</div>
+          </div>
+
+          <div class="step">
+            <div class="step-num">2</div>
+            <div class="step-text"><strong>Make the caramel.</strong> Combine sugar, water, and glucose syrup in a saucepan. Heat over medium, stirring until sugar dissolves. Stop stirring once it boils. Let it cook until it reaches a golden amber color (about 125°C / 257°F). Remove from heat and carefully stir in the cream and butter — it will bubble up. Stir in salt. Let it cool for 2–3 minutes.</div>
+          </div>
+
+          <div class="step">
+            <div class="step-num">3</div>
+            <div class="step-text"><strong>Shape the cups.</strong> Pour caramel into a lightly oiled silicone mini muffin mold, filling each about halfway. Let it cool for 5 minutes, then use oiled fingers (or the back of a small spoon) to press a hollow into each, pushing caramel up the sides to form a cup shape. Chill for 15 minutes.</div>
+          </div>
+
+          <div class="step">
+            <div class="step-num">4</div>
+            <div class="step-text"><strong>Fill them up.</strong> Press one roasted hazelnut into the center of each caramel cup. Spoon or pipe nougat/Nutella around the hazelnut, filling the cup to just below the rim.</div>
+          </div>
+
+          <div class="step">
+            <div class="step-num">5</div>
+            <div class="step-text"><strong>Add the chocolate cap.</strong> Melt dark chocolate over a double boiler (or in 20-second microwave bursts, stirring between). Spoon a small disc of melted chocolate on top of each filled cup, smoothing it to cover the nougat. Chill in the fridge for at least 30 minutes until set.</div>
+          </div>
+
+          <div class="step">
+            <div class="step-num">6</div>
+            <div class="step-text"><strong>Unmold and enjoy!</strong> Gently pop the Toffifee out of the mold. Store in an airtight container in the fridge for up to 2 weeks (if they last that long).</div>
+          </div>
+
+          <div class="recipe-tip">
+            <strong>Pro tip:</strong> If you have an empty Toffifee tray, use it as a mold for an authentic shape! Otherwise, a silicone half-sphere or mini muffin mold works perfectly. For an extra touch, drizzle a thin line of white chocolate on top.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════ QUOTE ═══════ -->
+<section>
+  <div class="quote-banner">
+    <div class="quote-text">"There's so much fun in Toffifee!"</div>
+    <div class="quote-author">— Classic Toffifee Tagline, 1980s</div>
+  </div>
+</section>
+
+<!-- ═══════ FOOTER ═══════ -->
+<footer>
+  Made with <span>&#9829;</span> and a whole hazelnut &middot; The Toffifee Appreciation Dashboard &middot; 2026
+</footer>
+
+<script>
+// ── Counter animation ──
+function animateCounters() {
+  document.querySelectorAll('.stat-number').forEach(el => {
+    const target = +el.dataset.target;
+    const suffix = el.dataset.suffix || '';
+    const duration = 2000;
+    const start = performance.now();
+    function tick(now) {
+      const p = Math.min((now - start) / duration, 1);
+      const eased = 1 - Math.pow(1 - p, 3);
+      el.textContent = Math.round(target * eased) + suffix;
+      if (p < 1) requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+  });
+}
+
+// ── Timeline reveal ──
+(function() {
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.2 });
+  document.querySelectorAll('.timeline-item').forEach(i => obs.observe(i));
+})();
+
+// ── Counter trigger ──
+(function() {
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { animateCounters(); obs.disconnect(); } });
+  }, { threshold: 0.3 });
+  obs.observe(document.querySelector('.stats-grid'));
+})();
+
+// ── Fun facts ──
+const facts = [
+  { emoji: '🏭', text: 'Toffifee was invented in 1973 in Germany by August Storck — the same company behind Werther\'s Original and Merci chocolates.' },
+  { emoji: '💡', text: 'Toffifee was originally marketed as a quick energy snack for working women — it became a candy for the whole family almost by accident.' },
+  { emoji: '🇺🇸', text: 'In the United States, Toffifee is sold under the name "Toffifay" in a white box, while the rest of the world gets the classic brown packaging.' },
+  { emoji: '📐', text: 'Each Toffifee is exactly 41% caramel, 37% nougat cream, 12% chocolate, and 10% hazelnut. Precision confectionery!' },
+  { emoji: '📺', text: 'The legendary tagline "There\'s so much fun in Toffifee!" debuted in German TV ads in the 1980s and became one of the most recognized candy slogans in Europe.' },
+  { emoji: '🌏', text: 'By 2016, Toffifee had expanded to over 100 countries — that\'s more than half the nations on Earth.' },
+  { emoji: '🎁', text: 'Toffifee\'s signature 15-piece tray is one of the most popular boxed candy gifts during the holiday season across Europe and Scandinavia.' },
+  { emoji: '🤔', text: 'The name "Toffifee" is a playful blend of "toffee" and "fee" (German for "fairy"). It literally means "toffee fairy."' }
+];
+
+let currentFact = 0;
+
+function showFact(i) {
+  currentFact = i;
+  document.getElementById('factEmoji').textContent = facts[i].emoji;
+  document.getElementById('factText').textContent = facts[i].text;
+  document.querySelectorAll('.fact-dot').forEach((d, j) => d.classList.toggle('active', j === i));
+}
+
+(function initFacts() {
+  const dots = document.getElementById('factDots');
+  facts.forEach((_, i) => {
+    const d = document.createElement('div');
+    d.className = 'fact-dot' + (i === 0 ? ' active' : '');
+    dots.appendChild(d);
+  });
+  showFact(0);
+})();
+
+document.getElementById('nextFact').addEventListener('click', () => showFact((currentFact + 1) % facts.length));
+document.getElementById('prevFact').addEventListener('click', () => showFact((currentFact - 1 + facts.length) % facts.length));
+setInterval(() => showFact((currentFact + 1) % facts.length), 6000);
+
+// ── TIVP Counter ──
+const reactions = [
+  { min: 0, max: 0, emoji: '', text: 'Tap + to start counting...' },
+  { min: 1, max: 1, emoji: '😊', text: 'The first one is always the best.' },
+  { min: 2, max: 4, emoji: '😋', text: 'Good pace. Nice and steady.' },
+  { min: 5, max: 5, emoji: '🖐️', text: 'A whole handful! Milestone reached.' },
+  { min: 6, max: 9, emoji: '😏', text: 'No one\'s counting... except this counter.' },
+  { min: 10, max: 10, emoji: '📦', text: 'Half a box down. Commitment unlocked.' },
+  { min: 11, max: 14, emoji: '🔥', text: 'You\'re on fire. Keep going.' },
+  { min: 15, max: 15, emoji: '🎉', text: 'A FULL BOX! That\'s 15 pieces of perfection!' },
+  { min: 16, max: 29, emoji: '🏆', text: 'Beyond the box. True dedication.' },
+  { min: 30, max: 30, emoji: '🤩', text: 'DOUBLE BOX. You are extraordinary.' },
+  { min: 31, max: 49, emoji: '👑', text: 'At this point, Storck should sponsor you.' },
+  { min: 50, max: 50, emoji: '🫡', text: 'FIFTY. You are a legend. We salute you.' },
+  { min: 51, max: 99, emoji: '🌟', text: 'Operating at a level few dare to reach.' },
+  { min: 100, max: Infinity, emoji: '💎', text: 'TOFFIFEE ROYALTY. The crown is yours forever.' }
+];
+
+let tivpCount = 0;
+const counterNum = document.getElementById('counterNum');
+const counterReaction = document.getElementById('counterReaction');
+
+function updateCounter() {
+  counterNum.textContent = tivpCount;
+  // bump animation
+  counterNum.classList.add('bump');
+  setTimeout(() => counterNum.classList.remove('bump'), 150);
+  // reaction
+  const r = reactions.find(r => tivpCount >= r.min && tivpCount <= r.max);
+  if (r) counterReaction.textContent = r.emoji + (r.emoji ? ' ' : '') + r.text;
+  // milestones
+  document.querySelectorAll('.milestone').forEach(m => {
+    m.classList.toggle('reached', tivpCount >= +m.dataset.at);
+  });
+  // confetti on milestones
+  if ([5, 10, 15, 30, 50, 100].includes(tivpCount)) spawnConfetti();
+}
+
+function spawnConfetti() {
+  const container = document.createElement('div');
+  container.className = 'confetti-container';
+  document.body.appendChild(container);
+  const colors = ['#FFD700', '#C47A2A', '#e8a33c', '#3b1a06', '#a0724a', '#F5E6D3', '#ff6b6b', '#48dbfb'];
+  for (let i = 0; i < 40; i++) {
+    const piece = document.createElement('div');
+    piece.className = 'confetti-piece';
+    piece.style.left = Math.random() * 100 + '%';
+    piece.style.top = '-10px';
+    piece.style.background = colors[Math.floor(Math.random() * colors.length)];
+    piece.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+    piece.style.width = (6 + Math.random() * 8) + 'px';
+    piece.style.height = (6 + Math.random() * 8) + 'px';
+    piece.style.animationDelay = (Math.random() * 0.5) + 's';
+    piece.style.animationDuration = (1 + Math.random() * 1.5) + 's';
+    container.appendChild(piece);
+  }
+  setTimeout(() => container.remove(), 3000);
+}
+
+document.getElementById('counterPlus').addEventListener('click', () => { tivpCount++; updateCounter(); });
+document.getElementById('counterMinus').addEventListener('click', () => { if (tivpCount > 0) { tivpCount--; updateCounter(); } });
+document.getElementById('counterReset').addEventListener('click', () => { tivpCount = 0; updateCounter(); });
+</script>
+</body>
+</html>
